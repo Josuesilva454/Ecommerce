@@ -57,7 +57,7 @@ public class UserService {
         ResponseDto responseDto = new ResponseDto();
         responseDto.setStatus("Sucesso");
         responseDto.setMessage("Usuário criado com sucesso");
-        //salvar o usúario
+        //salvar o usuário
         return responseDto;
     }
 
