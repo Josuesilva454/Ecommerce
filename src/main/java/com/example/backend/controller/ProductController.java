@@ -45,7 +45,6 @@ public class ProductController {
 
     // criando uma api para editar o produto
 
-
     @PostMapping("/update/{productId}")
     public ResponseEntity<ApiResponse> updateProduct(@PathVariable("productId") Integer productId, @RequestBody Productdto productDto) throws Exception {
         Optional<Category> optionalCategory = categoryrepository.findById(productDto.getCategoryId());

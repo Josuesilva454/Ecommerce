@@ -1,6 +1,7 @@
 package com.example.backend.service;
 
 import com.example.backend.dto.Productdto;
+import com.example.backend.exceptions.ProductNotExistsException;
 import com.example.backend.model.Category;
 import com.example.backend.model.Product;
 import com.example.backend.repository.ProductRepository;
@@ -70,5 +71,13 @@ public class ProductService {
         }
 
 
+    public Product findById(Integer productId) {
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (optionalProduct.isEmpty()) {
+            throw new ProductNotExistsException("Produto id está inválido" + productId);
+        }
+        return optionalProduct.get();
     }
+    }
+
 
