@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.common.ApiResponse;
 import com.example.backend.dto.Cart.AddToCartDto;
+import com.example.backend.dto.Cart.CartDto;
 import com.example.backend.model.User;
 import com.example.backend.service.AuthenticationService;
 import com.example.backend.service.CartService;
@@ -38,8 +39,21 @@ public class cartController {
 
         return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Adicionar no carrinho"), HttpStatus.CREATED) ;
     }
-   // GetMapping("/")
 
-   // public ResponseEntity<ApiResponse> (@RequestBody
+
+    @GetMapping("/")
+   public ResponseEntity<CartDto> getCartItens(@RequestParam("token")String token){
+
+       // autenticar o token
+       authenticationService.authenticate(token);
+
+
+       User user = authenticationService.getUser(token);
+
+         // retorna o carrinho do itens
+        CartDto cartDto = cartService.listCartItens(user);
+       return new ResponseEntity<>(cartDto, HttpStatus.OK);
+
+   }
     }
 

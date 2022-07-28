@@ -2,6 +2,8 @@ package com.example.backend.service;
 
 
 import com.example.backend.dto.Cart.AddToCartDto;
+import com.example.backend.dto.Cart.CartDto;
+import com.example.backend.dto.Cart.CartItemDto;
 import com.example.backend.model.Cart;
 import com.example.backend.model.Product;
 import com.example.backend.model.User;
@@ -9,7 +11,9 @@ import com.example.backend.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class CartService {
@@ -36,5 +40,25 @@ public class CartService {
 
         // salvar no carrinho
         cartRepository.save(cart);
+    }
+
+    public CartDto listCartItens(User user) {
+
+     final List<Cart> cartList =  cartRepository.findAllByUserOrderByCreatedDateDesc(user);
+
+     List<CartItemDto> cartItens = new ArrayList<>();
+
+     double totalCusto = 0;
+      for (Cart cart: cartList){
+          CartItemDto cartItemDto = new CartItemDto(cart);
+          totalCusto += cartItemDto.getQuantity() * cart.getProduct().getPrice();
+          cartItens.add(cartItemDto);
+      }
+
+      CartDto cartDto = new CartDto();
+      cartDto.setTotalCusto(totalCusto);
+      cartDto.setCartItens(cartItens);
+
+      return cartDto;
     }
 }
