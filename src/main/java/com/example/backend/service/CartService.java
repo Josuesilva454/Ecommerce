@@ -4,6 +4,7 @@ package com.example.backend.service;
 import com.example.backend.dto.Cart.AddToCartDto;
 import com.example.backend.dto.Cart.CartDto;
 import com.example.backend.dto.Cart.CartItemDto;
+import com.example.backend.exceptions.CustomException;
 import com.example.backend.model.Cart;
 import com.example.backend.model.Product;
 import com.example.backend.model.User;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartService {
@@ -60,5 +62,21 @@ public class CartService {
       cartDto.setCartItens(cartItens);
 
       return cartDto;
+    }
+
+
+    public void deleteCartItem(Integer cartItemId, User user) {
+        Optional<Cart> optionalCart = cartRepository.findById(cartItemId);
+
+        if (optionalCart.isEmpty()){
+            throw new CustomException("o ID do item do carrinho é inválido" + cartItemId);
+
+        }
+        Cart cart = optionalCart.get();
+
+        if (cart.getUser() != user){
+            throw  new CustomException("Item do carrinho não pertence ao usuário" +cartItemId);
+        }
+        cartRepository.delete(cart);
     }
 }
